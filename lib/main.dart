@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 Future<List<Coin>> fetchCoins(http.Client client) async {
   final response = await client
-      .get(Uri.parse('http://172.31.176.1:8000/contato'));
+      .get(Uri.parse('https://mockend.com/brunomendesdecarvalho/shop-cart/carts'));
 
   // Use the compute function to run parseCoins in a separate isolate.
   return compute(parseCoins, response.body);
@@ -21,25 +21,25 @@ List<Coin> parseCoins(String responseBody) {
 }
 
 class Coin {
-  final String id;
-  final String firstName;
-  final String lastName;
+  final int id;
+  final String owner;
+  // final String lastName;
   // final String address;
   // final String tradesCount24Hr;
 
   Coin({
     required this.id,
-    required this.firstName,
-    required this.lastName,
+    required this.owner,
+    // required this.lastName,
     // required this.priceUsd,
     // required this.tradesCount24Hr,
   });
 
   factory Coin.fromJson(Map<String, dynamic> json) {
     return Coin(
-      id: json['id'] as String,
-      firstName: json['firstname'] as String,
-      lastName: json['lastname'] as String,
+      id: json['id'] as int,
+      owner: json['owner'] as String,
+      // lastName: json['lastname'] as String,
       // priceUsd: json['priceUsd'] as String,
       // tradesCount24Hr: json['tradesCount24Hr'] as String,
     );
