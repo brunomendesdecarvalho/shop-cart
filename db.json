@@ -11,7 +11,7 @@
           ]
       }
   ],
-  "produtos": [
+  "produto": [
     {
         "id": 1,
         "nome": "Batata",
