@@ -7,7 +7,7 @@ void main() => runApp(ShopHistory());
 class ShopHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Carts';
+    final appTitle = 'Shopping History';
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -21,7 +21,7 @@ class ShopHistory extends StatelessWidget {
                 Tab(icon: Icon(Icons.list_alt)),
               ],
             ),
-            title: Text('Shopping History'),
+            title: Text(appTitle),
           ),
           body: TabBarView(
             children: [
