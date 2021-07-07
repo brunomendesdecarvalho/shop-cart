@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/carts.dart';
 import 'package:flutter_agenda/screens/products.dart';
 
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
 void main() => runApp(ShopHistory());
 
 class ShopHistory extends StatelessWidget {

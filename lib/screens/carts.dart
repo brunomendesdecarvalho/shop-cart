@@ -4,11 +4,18 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/cart-details.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_agenda/screens/products.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+import'products.dart';
 
 
 Future<List<Cart>> fetchCarts(http.Client client) async {
-  String uri = 'https://mockend.com/brunomendesdecarvalho/shop-cart/carts';
+  String uri = 'https://api-fluttter.herokuapp.com/api/v1/carrinho/';
   final response = await client
       .get(Uri.parse(uri));
 
@@ -25,17 +32,20 @@ List<Cart> parseCarts(String responseBody) {
 
 class Cart {
   final int id;
-  final String owner;
+  final double total;
+  final List<dynamic> products;
 
   Cart({
     required this.id,
-    required this.owner,
+    required this.total,
+    required this.products
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
     return Cart(
       id: json['id'] as int,
-      owner: json['owner'] as String,
+      total: json['total'] as double,
+      products: json['produtos'] as List<dynamic>
     );
   }
 }
@@ -67,7 +77,7 @@ class CartsList extends StatelessWidget {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('${carts[index].owner}',
+                                    Text('Nome do Produto x ${carts[index].products[0]['quantidade']}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.cyan,
@@ -75,7 +85,7 @@ class CartsList extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('Produtos aqui',
+                                subtitle: Text('Valor total: ${carts[index].total}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,

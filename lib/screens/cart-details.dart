@@ -20,14 +20,14 @@ class CartDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${cart.owner}',
+              Text('Nome do Produto x ${cart.products[0]['quantidade']}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.cyan,
                   )
               ),
-              Text('Produtos: Produtos Aqui',
+              Text('Valor total: ${cart.total}',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.lightBlueAccent,

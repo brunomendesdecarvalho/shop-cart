@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+
 import 'products.dart';
 
 class ProductDetails extends StatelessWidget {
@@ -27,7 +28,7 @@ class ProductDetails extends StatelessWidget {
                     color: Colors.cyan,
                   )
               ),
-              Text('Descrição: ${product.description}',
+              Text('Valor: ${product.value}',
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.lightBlueAccent,

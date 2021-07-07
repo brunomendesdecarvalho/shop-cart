@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/product-details.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
 
 Future<List<Product>> fetchProducts(http.Client client) async {
   final response = await client
-      .get(Uri.parse('https://mockend.com/brunomendesdecarvalho/shop-cart/products'));
+      .get(Uri.parse('https://api-fluttter.herokuapp.com/api/v1/produto/'));
 
   return compute(parseProducts, response.body);
 }
@@ -23,32 +26,44 @@ List<Product> parseProducts(String responseBody) {
 class Product {
   final int id;
   final String name;
-  final String description;
+  final double value;
 
   Product({
     required this.id,
     required this.name,
-    required this.description,
+    required this.value,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
+      name: json['nome'] as String,
+      value: double.parse(json['valor'])
     );
   }
+
+  String productToJson(Product data) => json.encode(data.toJson());
+
+  Map<String, dynamic> toJson() => {
+    "nome": name,
+    "valor": value,
+  };
 }
 
-class ProductsList extends StatelessWidget {
+class ProductsList extends StatefulWidget {
   final List<Product> products;
 
   ProductsList({Key? key, required this.products}) : super(key: key);
 
   @override
+  _ProductsListState createState() => _ProductsListState();
+}
+
+class _ProductsListState extends State<ProductsList> {
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: products.length,
+      itemCount: widget.products.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
@@ -67,7 +82,7 @@ class ProductsList extends StatelessWidget {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('${products[index].name}',
+                                    Text('${widget.products[index].name}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.cyan,
@@ -75,7 +90,7 @@ class ProductsList extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('${products[index].description}',
+                                subtitle: Text('${widget.products[index].value}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,
@@ -93,7 +108,7 @@ class ProductsList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProductsDetailsPage(
-                              product: this.products[index]
+                              product: this.widget.products[index]
                           )
                       )
                   );
@@ -129,7 +144,7 @@ class ProductsPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () {},
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
