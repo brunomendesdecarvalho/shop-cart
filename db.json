@@ -1,0 +1,21 @@
+{
+  "carrinho": [
+      {
+          "id": 1,
+          "total": 100.0,
+          "produtos": [
+              {
+                  "id": 1,
+                  "quantidade": 10
+              }
+          ]
+      }
+  ],
+  "produto": [
+    {
+        "id": 1,
+        "nome": "Batata",
+        "valor": "10.00"
+    }
+  ]  
+}
