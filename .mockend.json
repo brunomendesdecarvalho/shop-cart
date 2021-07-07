@@ -1,10 +1,13 @@
 {
-  "Cart": {
-    "owner": "string",
-    "products: "Product[]"
+  "Post": {
+    "title": "string",
+    "views": "int",
+    "published": "boolean",
+    "createdAt": "date",
+    "comments": "Comment[]"
   },
-  "Product": {
-    "name": "string"
-    "cart": "Cart"
+  "Comment": {
+    "body": "string",
+    "post": "Post"
   }
 }
