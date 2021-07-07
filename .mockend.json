@@ -1,7 +1,7 @@
 {
   "Cart": {
     "owner": "string",
-    "products": "Product[4]"
+    "products": "Product[]"
   },
   "Product": {
     "name": "string",
