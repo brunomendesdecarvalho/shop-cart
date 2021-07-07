@@ -4,7 +4,7 @@
     "products: "Product[]"
   },
   "Product": {
-    "name": "string"
+    "name": "string",
     "cart": "Cart"
   }
 }
