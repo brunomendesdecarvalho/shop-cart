@@ -1,0 +1,10 @@
+{
+  "Cart": {
+    "owner": "string",
+    "products: "Product[]"
+  },
+  "Product": {
+    "name": "string"
+    "cart": "Cart"
+  }
+}
