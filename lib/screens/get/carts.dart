@@ -36,6 +36,18 @@ class Cart {
     required this.products
   });
 
+  String productsBought() {
+    String productsBought = '';
+    for(var product in products) {
+      productsBought += product['nome'] + ' x' + product['quantidade'].toString();
+      if(product != products[products.length - 1]) {
+        productsBought += ', ';
+      }
+    }
+
+    return productsBought;
+  }
+
   factory Cart.fromJson(Map<String, dynamic> json) {
     return Cart(
       id: json['id'] as int,
@@ -72,7 +84,7 @@ class CartsList extends StatelessWidget {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Nome do Produto x ${carts[index].products[0]['quantidade']}',
+                                    Text('${carts[index].productsBought()}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.cyan,
