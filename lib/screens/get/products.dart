@@ -3,62 +3,68 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_agenda/screens/cart-details.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_agenda/screens/products.dart';
+import 'package:flutter_agenda/screens/details/product-details.dart';
+import 'package:flutter_agenda/screens/post/products-add.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import'products.dart';
 
-
-Future<List<Cart>> fetchCarts(http.Client client) async {
-  String uri = 'https://api-fluttter.herokuapp.com/api/v1/carrinho/';
+Future<List<Product>> fetchProducts(http.Client client) async {
   final response = await client
-      .get(Uri.parse(uri));
+      .get(Uri.parse('https://api-fluttter.herokuapp.com/api/v1/produto/'));
 
-  // Use the compute function to run parseCarts in a separate isolate.
-  return compute(parseCarts, response.body);
+  return compute(parseProducts, response.body);
 }
 
-// A function that converts a response body into a List<Cart>.
-List<Cart> parseCarts(String responseBody) {
+List<Product> parseProducts(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<Cart>((json) => Cart.fromJson(json)).toList();
+  return parsed.map<Product>((json) => Product.fromJson(json)).toList();
 }
 
-class Cart {
+class Product {
   final int id;
-  final double total;
-  final List<dynamic> products;
+  final String name;
+  final double value;
 
-  Cart({
+  Product({
     required this.id,
-    required this.total,
-    required this.products
+    required this.name,
+    required this.value,
   });
 
-  factory Cart.fromJson(Map<String, dynamic> json) {
-    return Cart(
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
       id: json['id'] as int,
-      total: json['total'] as double,
-      products: json['produtos'] as List<dynamic>
+      name: json['nome'] as String,
+      value: double.parse(json['valor'])
     );
   }
+
+  String productToJson(Product data) => json.encode(data.toJson());
+
+  Map<String, dynamic> toJson() => {
+    "nome": name,
+    "valor": value,
+  };
 }
 
-class CartsList extends StatelessWidget {
-  final List<Cart> carts;
+class ProductsList extends StatefulWidget {
+  final List<Product> products;
 
-  CartsList({Key? key, required this.carts}) : super(key: key);
+  ProductsList({Key? key, required this.products}) : super(key: key);
 
+  @override
+  _ProductsListState createState() => _ProductsListState();
+}
+
+class _ProductsListState extends State<ProductsList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: carts.length,
+      itemCount: widget.products.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
@@ -77,7 +83,7 @@ class CartsList extends StatelessWidget {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Nome do Produto x ${carts[index].products[0]['quantidade']}',
+                                    Text('${widget.products[index].name}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.cyan,
@@ -85,7 +91,7 @@ class CartsList extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('Valor total: ${carts[index].total}',
+                                subtitle: Text('${widget.products[index].value}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,
@@ -102,8 +108,8 @@ class CartsList extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CartsDetailsPage(
-                              cart: this.carts[index]
+                          builder: (context) => ProductsDetailsPage(
+                              product: this.widget.products[index]
                           )
                       )
                   );
@@ -117,29 +123,33 @@ class CartsList extends StatelessWidget {
   }
 }
 
-class CartsPage extends StatelessWidget {
-  final String title;
+class ProductsPage extends StatelessWidget {
 
-  CartsPage({Key? key, required this.title}) : super(key: key);
+  ProductsPage({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('Lista de Produtos'),
       ),
-      body: FutureBuilder<List<Cart>>(
-        future: fetchCarts(http.Client()),
+      body: FutureBuilder<List<Product>>(
+        future: fetchProducts(http.Client()),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
 
           return snapshot.hasData
-              ? CartsList(carts: snapshot.data!)
+              ? ProductsList(products: snapshot.data!)
               : Center(child: CircularProgressIndicator());
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProducts()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

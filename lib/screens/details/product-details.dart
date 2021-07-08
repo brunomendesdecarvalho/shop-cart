@@ -1,8 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/screens/get/products.dart';
+import 'package:http/http.dart' as http;
 
 
-import 'products.dart';
+Future<http.Response> deleteProduct(int id) async {
+  final http.Response response = await http.delete(
+    Uri.parse('http://api-fluttter.herokuapp.com/api/v1/produto/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  return response;
+}
 
 class ProductDetails extends StatefulWidget {
   Product product;
@@ -61,7 +72,26 @@ class ProductsDetailsPage extends StatelessWidget {
       ),
       body: ProductDetails(product: product),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('ATENÇÃO'),
+            content: const Text('Tem certeza que deseja deletar este produto?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancelar'),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  deleteProduct(this.product.id);
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        ),
         child: const Icon(Icons.highlight_remove_outlined),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

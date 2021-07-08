@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_agenda/screens/carts.dart';
-import 'package:flutter_agenda/screens/products.dart';
+import 'package:flutter_agenda/screens/get/carts.dart';
+import 'package:flutter_agenda/screens/get/products.dart';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,8 +28,8 @@ class ShopHistory extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              CartsPage(title: 'Carts',),
-              ProductsPage(title: 'Products'),
+              CartsPage(),
+              ProductsPage(),
             ],
           ),
         ),
