@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 
 import 'products.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetails extends StatefulWidget {
   Product product;
 
 
   ProductDetails({Key? key, required this.product}) : super(key: key);
 
+  @override
+  _ProductDetailsState createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,14 +26,14 @@ class ProductDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${product.name}',
+              Text('${widget.product.name}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.cyan,
                   )
               ),
-              Text('Valor: ${product.value}',
+              Text('Valor: ${widget.product.value}',
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.lightBlueAccent,
@@ -52,6 +57,7 @@ class ProductsDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Detalhes do Produto')
       ),
       body: ProductDetails(product: product),
       floatingActionButton: FloatingActionButton(

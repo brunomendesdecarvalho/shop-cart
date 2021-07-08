@@ -27,6 +27,7 @@ dependencies:
   http: ^0.13.3
   sqflite: ^2.0.0+3
   path: ^1.8.0
+  reactive_forms: ^10.4.1
 
 
   # The following adds the Cupertino Icons font to your application.
