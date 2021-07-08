@@ -1,7 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/utils/format-real.dart';
+
+import 'package:http/http.dart' as http;
 
 import '../get/carts.dart';
+
+Future<http.Response> deleteCart(int id) async {
+  final http.Response response = await http.delete(
+    Uri.parse('http://api-fluttter.herokuapp.com/api/v1/carrinho/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  return response;
+}
 
 class CartDetails extends StatelessWidget {
   Cart cart;
@@ -20,14 +34,14 @@ class CartDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Nome do Produto x ${cart.products[0]['quantidade']}',
+              Text('${cart.productsBought()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.cyan,
                   )
               ),
-              Text('Valor total: ${cart.total}',
+              Text('Valor total: R\$ ${realFormat.format(cart.total)}',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.lightBlueAccent,
@@ -54,10 +68,29 @@ class CartsDetailsPage extends StatelessWidget {
       ),
       body: CartDetails(cart: cart),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
-        child: const Icon(Icons.remove_shopping_cart),
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('ATENÇÃO'),
+            content: const Text('Tem certeza que deseja deletar este produto?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancelar'),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+              onPressed: () {
+                deleteCart(this.cart.id);
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+              ),
+            ],
+          ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        child: const Icon(Icons.remove_shopping_cart),
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

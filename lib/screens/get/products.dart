@@ -7,6 +7,8 @@ import 'package:flutter_agenda/screens/details/product-details.dart';
 import 'package:flutter_agenda/screens/post/products-add.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:flutter_agenda/utils/format-real.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -91,7 +93,7 @@ class _ProductsListState extends State<ProductsList> {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('${widget.products[index].value}',
+                                subtitle: Text('R\$ ${realFormat.format(widget.products[index].value)}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,

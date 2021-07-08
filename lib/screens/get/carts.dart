@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/details/cart-details.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_agenda/utils/format-real.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:path/path.dart';
@@ -92,7 +93,7 @@ class CartsList extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('Valor total: ${carts[index].total}',
+                                subtitle: Text('Valor total: R\$ ${realFormat.format(carts[index].total)}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,
