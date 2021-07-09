@@ -115,6 +115,7 @@ class _ProductsListState extends State<ProductsList> {
                           )
                       )
                   );
+                  setState(() {});
                 },
               ),
             ),

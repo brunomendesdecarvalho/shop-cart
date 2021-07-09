@@ -67,6 +67,7 @@ class AddProducts extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               createProduct(form.control('nome').value, form.control('valor').value);
+              Navigator.pop(context);
             },
             child: Text('Adicionar Produto'),
           ),

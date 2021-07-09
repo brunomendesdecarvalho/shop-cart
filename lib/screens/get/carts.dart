@@ -58,15 +58,20 @@ class Cart {
   }
 }
 
-class CartsList extends StatelessWidget {
+class CartsList extends StatefulWidget {
   final List<Cart> carts;
 
   CartsList({Key? key, required this.carts}) : super(key: key);
 
   @override
+  _CartsListState createState() => _CartsListState();
+}
+
+class _CartsListState extends State<CartsList> {
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: carts.length,
+      itemCount: widget.carts.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
@@ -85,7 +90,7 @@ class CartsList extends StatelessWidget {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('${carts[index].productsBought()}',
+                                    Text('${widget.carts[index].productsBought()}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.cyan,
@@ -93,7 +98,7 @@ class CartsList extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                subtitle: Text('Valor total: R\$ ${realFormat.format(carts[index].total)}',
+                                subtitle: Text('Valor total: R\$ ${realFormat.format(widget.carts[index].total)}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.lightBlueAccent,
@@ -111,10 +116,11 @@ class CartsList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CartsDetailsPage(
-                              cart: this.carts[index]
+                              cart: this.widget.carts[index]
                           )
                       )
                   );
+                  setState(() {});
                 },
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/get/products.dart';
+import 'package:flutter_agenda/utils/format-real.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -44,7 +45,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     color: Colors.cyan,
                   )
               ),
-              Text('Valor: ${widget.product.value}',
+              Text('Valor: R\$ ${realFormat.format(widget.product.value)}',
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.lightBlueAccent,
