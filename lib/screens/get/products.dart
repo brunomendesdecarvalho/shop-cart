@@ -7,6 +7,7 @@ import 'package:flutter_agenda/screens/details/product-details.dart';
 import 'package:flutter_agenda/screens/post/products-add.dart';
 import 'package:http/http.dart' as http;
 
+
 import 'package:flutter_agenda/utils/format-real.dart';
 
 import 'package:path/path.dart';
@@ -63,6 +64,7 @@ class ProductsList extends StatefulWidget {
 }
 
 class _ProductsListState extends State<ProductsList> {
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -114,8 +116,7 @@ class _ProductsListState extends State<ProductsList> {
                               product: this.widget.products[index]
                           )
                       )
-                  );
-                  setState(() {});
+                  ).then((_) => setState(() {}));
                 },
               ),
             ),

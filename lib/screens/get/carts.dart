@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/details/cart-details.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_agenda/screens/post/carts-add.dart';
 import 'package:flutter_agenda/utils/format-real.dart';
 import 'package:http/http.dart' as http;
 
@@ -120,7 +121,6 @@ class _CartsListState extends State<CartsList> {
                           )
                       )
                   );
-                  setState(() {});
                 },
               ),
             ),
@@ -152,7 +152,12 @@ class CartsPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CartAddPage()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

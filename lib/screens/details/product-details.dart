@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/screens/get/carts.dart';
 import 'package:flutter_agenda/screens/get/products.dart';
 import 'package:flutter_agenda/utils/format-real.dart';
 import 'package:http/http.dart' as http;
@@ -87,6 +88,15 @@ class ProductsDetailsPage extends StatelessWidget {
                 onPressed: () {
                   deleteProduct(this.product.id);
                   Navigator.pop(context);
+                  Navigator.pop(context);
+                  // Navigator.push(context, MaterialPageRoute(
+                  //         builder: (context) => CartsPage()
+                  //   )
+                  // );
+                  // Navigator.push(context, MaterialPageRoute(
+                  //         builder: (context) => ProductsPage()
+                  //   )
+                  // );
                 },
                 child: const Text('OK'),
               ),

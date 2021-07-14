@@ -1,77 +1,219 @@
-// import 'dart:convert';
-//
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:reactive_forms/reactive_forms.dart';
-//
-// Future<http.Response> createCart(int idProd, int quant) {
-//   return http.post(
-//     Uri.parse('https://api-fluttter.herokuapp.com/api/v1/carrinho/'),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//     body: jsonEncode(<String, String>{
-//       'nome': nome,
-//       'valor': valor
-//     }),
-//   );
-// }
-//
-// class AddCarts extends StatelessWidget {
-//   final form = FormGroup({
-//     'nome': FormControl<String>(validators: [Validators.required]),
-//     'valor': FormControl<String>(validators: [Validators.required]),
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Adicionar Produto'),),
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: <Widget>[
-//           ReactiveForm(
-//             formGroup: form,
-//             child: Center(
-//                 child: ListView(
-//                     shrinkWrap: true,
-//                     padding: EdgeInsets.all(15),
-//                     children: <Widget>[
-//                       ReactiveTextField(
-//                         formControlName: 'nome',
-//                         decoration: InputDecoration(
-//                           labelText: 'Nome',
-//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0)),
-//                           focusedBorder: OutlineInputBorder(
-//                             borderSide: BorderSide(width: 2.0),
-//                             borderRadius: BorderRadius.circular(4.0),
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(height: 20),
-//                       ReactiveTextField(
-//                         formControlName: 'valor',
-//                         decoration: InputDecoration(
-//                           labelText: 'Valor',
-//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0)),
-//                           focusedBorder: OutlineInputBorder(
-//                             borderSide: BorderSide(width: 2.0),
-//                             borderRadius: BorderRadius.circular(4.0),
-//                           ),
-//                         ),
-//                       ),
-//                     ]
-//                 )
-//             ),
-//           ),
-//           ElevatedButton(
-//             onPressed: () {
-//               createCart(form.control('nome').value, form.control('valor').value);
-//             },
-//             child: Text('Adicionar Produto'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import "package:equatable/equatable.dart";
+
+
+import 'package:flutter_agenda/utils/format-real.dart';
+
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+String jsonCart = '';
+
+Future<http.Response> createCart() {
+  return http.post(
+    Uri.parse('https://api-fluttter.herokuapp.com/api/v1/carrinho/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonCart
+  );
+}
+
+String makeJson(List<Product> products) {
+  String json = '{"produtos": [';
+  for (var product in products) {
+    if(product.quantity > 0) {
+      if(product == products[products.length - 1]) {
+        json += product.toString();
+      } else {
+        json += product.toString() + ',';
+      }
+    }
+  }
+  json += ']}';
+
+  return json;
+}
+
+
+Future<List<Product>> fetchProducts(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('https://api-fluttter.herokuapp.com/api/v1/produto/'));
+
+  return compute(parseProducts, response.body);
+}
+
+List<Product> parseProducts(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<Product>((json) => Product.fromJson(json)).toList();
+}
+
+class Product extends Equatable {
+  final int id;
+  final String name;
+  final double value;
+  late int quantity = 0;
+
+  Product({
+    required this.id,
+    required this.name,
+    required this.value,
+  });
+
+  @override
+  String toString() {
+    return '{"id": ${this.id}, "quantidade": ${this.quantity}}';
+  }
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+        id: json['id'] as int,
+        name: json['nome'] as String,
+        value: double.parse(json['valor'])
+    );
+  }
+
+  String productToJson(Product data) => json.encode(data.toJson());
+
+  Map<String, dynamic> toJson() => {
+    "nome": name,
+    "valor": value,
+  };
+
+  @override
+  List<Object?> get props => [id, name, value, quantity];
+}
+
+class ProductSelectionList extends StatefulWidget {
+  final List<Product> products;
+  List<Product> get productList => this.products;
+
+  ProductSelectionList({Key? key, required this.products}) : super(key: key);
+
+  @override
+  _ProductSelectionListState createState() => _ProductSelectionListState();
+}
+
+class _ProductSelectionListState extends State<ProductSelectionList> {
+  int quantity = 0;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.products.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
+              child: Card(
+                  color: Colors.white,
+                  elevation: 0,
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Stack(
+                          children: <Widget>[
+                            ListTile(
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('${widget.products[index].name}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.cyan,
+                                      )
+                                  ),
+                                ],
+                              ),
+                              subtitle: Text('R\$ ${realFormat.format(widget.products[index].value)}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.lightBlueAccent,
+                                  )
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              splashRadius: 10,
+                              onPressed: () {
+                                if (widget.products[index].quantity > 0) {
+                                  setState(() {
+                                    widget.products[index].quantity--;
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.remove),
+                                color: Colors.black12,
+                                iconSize: 16,
+                              ),
+                              Text('${widget.products[index].quantity}'),
+                              IconButton(
+                              splashRadius: 10,
+                              onPressed: () {setState((){widget.products[index].quantity++;});},
+                              icon: Icon(Icons.add),
+                              color: Colors.lightBlueAccent,
+                              iconSize: 16,
+                            ),
+                          ]
+                        )
+                      ],
+                    ),
+                  )
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                jsonCart = makeJson(widget.products);
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class CartAddPage extends StatelessWidget {
+
+  CartAddPage({Key? key,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Novo Carrinho'),
+      ),
+      body: FutureBuilder<List<Product>>(
+        future: fetchProducts(http.Client()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+
+          return snapshot.hasData
+              ? ProductSelectionList(products: snapshot.data!)
+              : Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print(jsonCart);
+          createCart();
+        },
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
