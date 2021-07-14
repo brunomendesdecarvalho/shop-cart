@@ -29,6 +29,7 @@ dependencies:
   path: ^1.8.0
   reactive_forms: ^10.4.1
   equatable: ^2.0.3
+  pull_to_refresh: ^2.0.0
 #  frefresh: ^1.1.0
 
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_agenda/screens/get/carts.dart';
 import 'package:flutter_agenda/screens/get/products.dart';
 
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -12,25 +14,30 @@ class ShopHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     final appTitle = 'Shopping History';
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.shopping_cart)),
-                Tab(icon: Icon(Icons.list_alt)),
+    return RefreshConfiguration(
+      headerTriggerDistance: 80.0,
+      enableScrollWhenRefreshCompleted: true,
+      enableLoadingWhenFailed : true,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              bottom: TabBar(
+                tabs: [
+                  Tab(icon: Icon(Icons.shopping_cart)),
+                  Tab(icon: Icon(Icons.list_alt)),
+                ],
+              ),
+              title: Text(appTitle),
+            ),
+            body: TabBarView(
+              children: [
+                CartsPage(),
+                ProductsPage(),
               ],
             ),
-            title: Text(appTitle),
-          ),
-          body: TabBarView(
-            children: [
-              CartsPage(),
-              ProductsPage(),
-            ],
           ),
         ),
       ),
