@@ -89,7 +89,7 @@ class _ProductsListState extends State<ProductsList> {
                                   children: [
                                     Text('${widget.products[index].name}',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 20,
                                           color: Colors.cyan,
                                         )
                                     ),
@@ -97,7 +97,7 @@ class _ProductsListState extends State<ProductsList> {
                                 ),
                                 subtitle: Text('R\$ ${realFormat.format(widget.products[index].value)}',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 16,
                                       color: Colors.lightBlueAccent,
                                     )
                                 ),

@@ -93,7 +93,7 @@ class _CartsListState extends State<CartsList> {
                                   children: [
                                     Text('${widget.carts[index].productsBought()}',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 20,
                                           color: Colors.cyan,
                                         )
                                     ),
@@ -101,7 +101,7 @@ class _CartsListState extends State<CartsList> {
                                 ),
                                 subtitle: Text('Valor total: R\$ ${realFormat.format(widget.carts[index].total)}',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 16,
                                       color: Colors.lightBlueAccent,
                                     )
                                 ),

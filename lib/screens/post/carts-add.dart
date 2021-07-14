@@ -28,13 +28,10 @@ String makeJson(List<Product> products) {
   String json = '{"produtos": [';
   for (var product in products) {
     if(product.quantity > 0) {
-      if(product == products[products.length - 1]) {
-        json += product.toString();
-      } else {
-        json += product.toString() + ',';
-      }
+      json += product.toString() + ',';
     }
   }
+  json = json.substring(0, json.length-1);
   json += ']}';
 
   return json;
@@ -127,7 +124,7 @@ class _ProductSelectionListState extends State<ProductSelectionList> {
                                 children: [
                                   Text('${widget.products[index].name}',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         color: Colors.cyan,
                                       )
                                   ),
@@ -135,7 +132,7 @@ class _ProductSelectionListState extends State<ProductSelectionList> {
                               ),
                               subtitle: Text('R\$ ${realFormat.format(widget.products[index].value)}',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 16,
                                     color: Colors.lightBlueAccent,
                                   )
                               ),
@@ -143,7 +140,7 @@ class _ProductSelectionListState extends State<ProductSelectionList> {
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          // mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
                               splashRadius: 10,
@@ -166,18 +163,20 @@ class _ProductSelectionListState extends State<ProductSelectionList> {
                               color: Colors.lightBlueAccent,
                               iconSize: 16,
                             ),
+                            Spacer(),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {jsonCart = makeJson(widget.products);},
+                              child: const Text('Adicionar'),
+                            ),
                           ]
                         )
                       ],
                     ),
                   )
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                jsonCart = makeJson(widget.products);
-              },
-              child: const Text('Confirmar'),
             ),
           ],
         );
@@ -211,7 +210,7 @@ class CartAddPage extends StatelessWidget {
           print(jsonCart);
           createCart();
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add_shopping_cart),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
