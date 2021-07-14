@@ -209,6 +209,7 @@ class CartAddPage extends StatelessWidget {
         onPressed: () {
           print(jsonCart);
           createCart();
+          Navigator.pop(context);
         },
         child: const Icon(Icons.add_shopping_cart),
       ),

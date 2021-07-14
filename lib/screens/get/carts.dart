@@ -38,6 +38,35 @@ class Cart {
     required this.products
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'cart_id': id,
+      'total': total,
+      'product_id': products
+    };
+  }
+
+  Future<void> insertCart(Cart cart) async {
+
+    final database = openDatabase(
+      join(await getDatabasesPath(), 'database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+            'DROP TABLE carts; CREATE TABLE carts(cart_id INTEGER PRIMARY KEY, total DECIMAL, product_id INTEGER, FOREIGN KEY (product_id) REFERENCES products(product_id))'
+        );
+      },
+      version: 1,
+    );
+
+    final db = await database;
+
+    await db.insert(
+      'carts',
+      cart.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   String productsBought() {
     String productsBought = '';
     for(var product in products) {
@@ -69,6 +98,7 @@ class CartsList extends StatefulWidget {
 }
 
 class _CartsListState extends State<CartsList> {
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

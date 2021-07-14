@@ -38,6 +38,35 @@ class Product {
     required this.value,
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'product_id': id,
+      'name': name,
+      'value': value
+    };
+  }
+
+  Future<void> insertProduct(Product product) async {
+
+    final database = openDatabase(
+      join(await getDatabasesPath(), 'database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'DROP TABLE products; CREATE TABLE products(product_id INTEGER PRIMARY KEY, name String, value DECIMAL)',
+        );
+      },
+      version: 1,
+    );
+
+    final db = await database;
+
+    await db.insert(
+      'products',
+      product.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] as int,
