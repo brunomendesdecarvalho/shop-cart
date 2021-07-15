@@ -64,6 +64,7 @@ As dependências que se encontram no arquivo pubspect.yaml, são as seguintes:
 - sqflite: ^2.0.0+3
 - path: ^1.8.0
 - reactive_forms: ^10.4.1
+- equatable: ^2.0.3
 
 ### Bugs Conhecidos
 - As páginas não atualizam automaticamente após uma requisição HTTP;
@@ -71,7 +72,6 @@ As dependências que se encontram no arquivo pubspect.yaml, são as seguintes:
 ### O que Faltou Fazer
 - Adicionar mecanismos de persistência em banco de dados local, sincronizando com a API;
 - Atualizar páginas automaticamente;
-- Programar a página "Novo Carrinho".
 
 ### Como Rodar o Projeto
 
@@ -110,11 +110,11 @@ flutter run
 Uma lista com os dispositivos disponíveis aparecerá. Basta escolher o desejado e esperar o aplicativo iniciar.
 
 #### Vídeo
-O vídeo de apresentação do trabalho está disponível neste [link](https://www.youtube.com/watch?v=Cq7g2jPdqmE).
+A apresentação do trabalho está disponível em duas partes. A primeira, gravada para a primeira data de entrega, encontra-se neste [link](https://www.youtube.com/watch?v=Cq7g2jPdqmE); a segunda, gravada para a entrega no dia 14/07, que contempla o que foi feito após o primeiro vídeo, encontra-se neste [link](https://www.youtube.com/watch?v=kuWCKCJjp6E).
 
 ### Agradecimentos
 - Agradeço ao Artur Oliveira, por aceitar ser minha dupla e ter feito uma API muito boa para esse projeto, além de tê-la hospedado e de aceitar meus feedbacks e, por fim, de ter me ajudado com algumas partes no Flutter;
-- Agradeço ao professor Ely Miranda por nos acompanhar durante 4 dos 5 semestres que cursamos até esse ponto, e por ter me apresentado ao Flutter, linguagem esta que está, hoje, dentro dos meus planos profissionais. Considere esta documentação uma demonstração da minha gratidão, bem como uma forma de compensar o que não completamos desse trabalho, hehehe. :)
+- Agradeço ao professor Ely Miranda por nos acompanhar durante 4 dos 5 semestres que cursamos até esse ponto, e por ter me apresentado ao Flutter, linguagem esta que está, hoje, dentro dos meus planos profissionais. Considere esta documentação uma demonstração da minha gratidão hehehe. :)
 
 Atenciosamente,
 
