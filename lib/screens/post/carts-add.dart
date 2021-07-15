@@ -9,9 +9,6 @@ import "package:equatable/equatable.dart";
 
 import 'package:flutter_agenda/utils/format-real.dart';
 
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-
 String jsonCart = '';
 
 Future<http.Response> createCart() {

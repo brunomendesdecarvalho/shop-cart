@@ -88,15 +88,6 @@ class ProductsDetailsPage extends StatelessWidget {
                 onPressed: () {
                   deleteProduct(this.product.id);
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  // Navigator.push(context, MaterialPageRoute(
-                  //         builder: (context) => CartsPage()
-                  //   )
-                  // );
-                  // Navigator.push(context, MaterialPageRoute(
-                  //         builder: (context) => ProductsPage()
-                  //   )
-                  // );
                 },
                 child: const Text('OK'),
               ),
